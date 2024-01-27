@@ -12,7 +12,6 @@ if (process.env.MODE == "DEV") {
   console.log(`mode : ${process.env.MODE}`);
 }
 
-//console.log(process.env)
 
 const port = process.env.PORT || 3000;
 server.listen(port, () => console.log(`Server Started, listening to port ${port}`));
