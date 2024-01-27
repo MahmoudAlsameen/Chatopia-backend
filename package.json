@@ -1,0 +1,29 @@
+{
+  "name": "chatopia-backend",
+  "version": "1.0.0",
+  "description": "Chatopia-backend: Secure chat app backend powered by Node.js, Express, WebSocket, Mongoose for MongoDB interaction, bcrypt, and JSON Web Tokens.",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MahmoudAlsameen/Chatopia-backend.git"
+  },
+  "author": "Mahmoud Alsameen",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MahmoudAlsameen/Chatopia-backend/issues"
+  },
+  "homepage": "https://github.com/MahmoudAlsameen/Chatopia-backend#readme",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.1",
+    "express": "^4.18.2",
+    "joi": "^17.12.0",
+    "morgan": "^1.10.0",
+    "ws": "^8.16.0"
+  }
+}
