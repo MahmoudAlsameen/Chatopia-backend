@@ -8,7 +8,7 @@ const server = express();
 server.use(cors());
 
 if (process.env.MODE == "DEV") {
-  morgan("dev");
+  server.use(morgan("dev"));
   console.log(`mode : ${process.env.MODE}`);
 }
 
