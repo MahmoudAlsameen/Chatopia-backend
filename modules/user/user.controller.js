@@ -58,11 +58,33 @@ const userLogin = async (req, res) => {
 }
 
 
+const userUpdate = async (req, res) => {
+  try {
+    const userId = req.decodedToken.id
+    const user = await userModel.findById(userId)
+    if (user) {
+      if (req.body.password) {
+        const hashedPassword = bcrypt.hashSync(req.body.password, saltRounds);
+        const udpatedUser = await userModel.findByIdAndUpdate(userId, { ...req.body, password: hashedPassword }, { new: true })
+      } else {
+        const udpatedUser = await userModel.findByIdAndUpdate(userId, { ...req.body }, { new: true })
+      }
+      res.status(200).json({ message: "User updated successfully" })
+
+    } else {
+      res.status(404).json({ message: "User not found" })
+    }
+  } catch (error) {
+
+    res.status(500).json({ message: "Internal server error", error })
+
+  }
+
+}
 
 
 
 
 
 
-
-export { userRegister, userLogin }
+export { userRegister, userLogin, userUpdate }
