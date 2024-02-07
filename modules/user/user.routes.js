@@ -7,8 +7,8 @@ import auth from "../../middleware/auth.js"
 const userRoutes = exress.Router()
 
 
-userRoutes.post("/user/register", validation(userRegisterValidationSchema), userRegister);
-userRoutes.post("/user/login", validation(userLoginValidationSchema), userLogin);
+userRoutes.post("/register", validation(userRegisterValidationSchema), userRegister);
+userRoutes.post("/login", validation(userLoginValidationSchema), userLogin);
 
 
 
