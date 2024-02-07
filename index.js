@@ -3,11 +3,18 @@ import "dotenv/config";
 import morgan from "morgan";
 import cors from "cors";
 import connection from "./DB/connection.js";
+import userRoutes from "./modules/user/user.routes.js";
+
 
 
 const server = express();
 
 server.use(cors());
+server.use(express.json());
+server.use(userRoutes);
+
+
+
 
 if (process.env.MODE == "DEV") {
   server.use(morgan("dev"));
