@@ -10,11 +10,21 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
       unique: true,
+      minlength: 3,
+      maxlength: 30,
+      match: /^[a-zA-Z0-9]+$/,
+    },
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      match: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{1,}$/,
     },
     password: {
       type: String,
       required: true,
       minlength: 8,
+      match: /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*()_+{}\[\]:;<>,.?~\\-]).{8,}$/,
     },
     gender: {
       type: String,
@@ -36,7 +46,7 @@ const userSchema = new mongoose.Schema(
   {
     timestamps: true
   }
-)
+);
 
 
 
