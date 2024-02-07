@@ -10,9 +10,16 @@ const saltRounds = 4;
 
 const userRegister = async (req, res) => {
   try {
-    const hashedPassword = bcrypt.hashSync(req.body.password, saltRounds);
-    const addedUser = await userModel.create({ ...req.body, password: hashedPassword });
-    res.status(201).json({ message: "user added successfully" });
+    const email = req.body.email;
+    const queriedUser = await userModel.findOne({ email });
+    if (queriedUser) {
+      res.status(409).json({ message: "User already exists" });
+    } else {
+      const hashedPassword = bcrypt.hashSync(req.body.password, saltRounds);
+      const addedUser = await userModel.create({ ...req.body, password: hashedPassword });
+      res.status(201).json({ message: "User added successfully" });
+
+    }
   } catch (error) {
     res.status(500).json({ message: "Internal server error", error })
   }
