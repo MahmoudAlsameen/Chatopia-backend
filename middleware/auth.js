@@ -1,24 +1,26 @@
 import jwt from "jsonwebtoken";
 import "dotenv/config";
 
-const secret_key = process.env.JWT_SECRET_KEY;
+const jwt_secret_key = process.env.JWT_SECRET_KEY;
 
 
 const auth = (req, res, next) => {
-
-  let { token } = req.headers;
-  if (token) {
-    try {
-      let decodedToken = jwt.verify(token, secret_key);
-      req.decodedToken = decodedToken;
-      next();
-    } catch (error) {
-      res.status(401).json({ message: "invalid token" });
+  try {
+    const { token } = req.headers;
+    if (token) {
+      const decodedToken = jwt.verify(token, jwt_secret_key);
+      if (decodedToken) {
+        req.decodedToken = decodedToken;
+        next();
+      } else {
+        res.status(401).json({ message: "Invalid token" })
+      }
+    } else {
+      res.status(401).json({ message: "token not provided" });
     }
-  } else {
-    return res.status(401).json({ message: "token not provided" });
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error", error })
   }
-
 }
 
 
