@@ -66,21 +66,40 @@ const userUpdate = async (req, res) => {
     const userId = req.decodedToken.id;
     const user = await userModel.findById(userId);
     if (user) {
-      if (req.body.password) {
-        const hashedPassword = bcrypt.hashSync(req.body.password, saltRounds);
-        const udpatedUser = await userModel.findByIdAndUpdate(
-          userId,
-          { ...req.body, password: hashedPassword },
-          { new: true }
-        );
+      const updatedFields = { ...req.body };
+      if (req.body.newPassword) {
+        const matched = bcrypt.compareSync(req.body.oldPassword, user.password);
+        if (matched) {
+          const newHashedPassword = bcrypt.hashSync(
+            req.body.newPassword,
+            saltRounds
+          );
+          updatedFields.password = newHashedPassword;
+          const updatedUser = await userModel.findByIdAndUpdate(
+            userId,
+            updatedFields,
+            { new: true }
+          );
+          res.status(200).json({ message: "User updated with password" });
+        } else {
+          updatedFields.password = user.password;
+          const updatedUser = await userModel.findByIdAndUpdate(
+            userId,
+            updatedFields,
+            { new: true }
+          );
+          res.status(200).json({
+            message: "User updated without password, invalid old password",
+          });
+        }
       } else {
-        const udpatedUser = await userModel.findByIdAndUpdate(
+        const updatedUser = await userModel.findByIdAndUpdate(
           userId,
           { ...req.body },
           { new: true }
         );
+        res.status(200).json({ message: "User updated successfully" });
       }
-      res.status(200).json({ message: "User updated successfully" });
     } else {
       res.status(404).json({ message: "User not found" });
     }
