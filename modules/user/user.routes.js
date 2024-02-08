@@ -1,8 +1,8 @@
 import exress from "express"
-import { userRegister, userLogin, userUpdate } from "./user.controller.js"
-import { userRegisterValidationSchema, userLoginValidationSchema, userUpdateValidationSchema } from "./user.validation.js"
-import validation from "../../middleware/validation.js"
 import auth from "../../middleware/auth.js"
+import validation from "../../middleware/validation.js"
+import { userLogin, userRegister, userUpdate } from "./user.controller.js"
+import { userLoginValidationSchema, userRegisterValidationSchema, userUpdateValidationSchema } from "./user.validation.js"
 
 const userRoutes = exress.Router()
 
