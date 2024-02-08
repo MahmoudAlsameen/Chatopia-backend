@@ -58,4 +58,4 @@ const userUpdateValidationSchema = Joi.object({
 
 
 
-export { userRegisterValidationSchema, userLoginValidationSchema, userUpdateValidationSchema }
+export { userLoginValidationSchema, userRegisterValidationSchema, userUpdateValidationSchema }
