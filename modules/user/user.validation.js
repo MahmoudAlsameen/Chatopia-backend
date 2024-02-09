@@ -5,6 +5,7 @@ const userPasswordSchema = Joi.string()
   .pattern(
     /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*()_+{}\[\]:;<>,.?~\\-]).{8,}$/
   )
+  .required()
   .messages({
     "string.pattern.base":
       "Password must contain at least one uppercase letter, one lowercase letter, one digit, one special character, and be at least 8 characters long.",
@@ -37,10 +38,14 @@ const userUpdateValidationSchema = Joi.object({
     .email()
     .pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{1,}$/),
   userName: Joi.string().alphanum().min(3).max(30),
-  oldPassword: userPasswordSchema,
-  newPassword: userPasswordSchema,
   fullName: Joi.string(),
   gender: Joi.string().valid("male", "female"),
+});
+
+// User Change Password validation schema
+const userChangePasswordValidationSchema = Joi.object({
+  oldPassword: userPasswordSchema,
+  newPassword: userPasswordSchema,
 });
 
 // User Delete validation schema
@@ -53,6 +58,7 @@ const userDeleteValidationSchema = Joi.object({
 });
 
 export {
+  userChangePasswordValidationSchema,
   userDeleteValidationSchema,
   userLoginValidationSchema,
   userRegisterValidationSchema,

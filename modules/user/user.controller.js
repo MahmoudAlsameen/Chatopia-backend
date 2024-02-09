@@ -30,12 +30,10 @@ const userRegister = async (req, res) => {
           .json({ message: `Username '${userName}' is already in use` });
       } else {
         // Generic duplicate key error
-        console.log("Duplicate key error:", error);
         res.status(409).json({ message: "Duplicate key error", error });
       }
     } else {
       // Handle other errors
-      console.log("Internal server error:", error);
       res.status(500).json({ message: "Internal server error", error });
     }
   }
@@ -46,8 +44,8 @@ const userLogin = async (req, res) => {
     const { email, password } = req.body;
     const queriedUser = await userModel.findOne({ email });
     if (queriedUser) {
-      const matched = bcrypt.compareSync(password, queriedUser.password);
-      if (matched) {
+      const isMatched = bcrypt.compareSync(password, queriedUser.password);
+      if (isMatched) {
         const token = jwt.sign({ id: queriedUser.id }, jwt_secret_key);
         res.status(200).json({ message: "Logged in successfully", token });
       } else {
@@ -63,42 +61,45 @@ const userLogin = async (req, res) => {
 
 const userUpdate = async (req, res) => {
   try {
-    const userId = req.decodedToken.id;
+    const decodedToken = req.decodedToken;
+    const userId = decodedToken.id;
+    let user = await userModel.findById(userId);
+    if (user) {
+      const updatedUser = await userModel.findByIdAndUpdate(
+        userId,
+        { ...req.body },
+        { new: true }
+      );
+      res
+        .status(200)
+        .json({ message: "User updated successfully", updatedUser });
+    } else {
+      res.status(404).json({ message: "User not found" });
+    }
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error", error });
+  }
+};
+
+const userChangePassword = async (req, res) => {
+  try {
+    const decodedToken = req.decodedToken;
+    const userId = decodedToken.id;
     const user = await userModel.findById(userId);
     if (user) {
-      const updatedFields = { ...req.body };
-      if (req.body.newPassword) {
-        const matched = bcrypt.compareSync(req.body.oldPassword, user.password);
-        if (matched) {
-          const newHashedPassword = bcrypt.hashSync(
-            req.body.newPassword,
-            saltRounds
-          );
-          updatedFields.password = newHashedPassword;
-          const updatedUser = await userModel.findByIdAndUpdate(
-            userId,
-            updatedFields,
-            { new: true }
-          );
-          res.status(200).json({ message: "User updated with password" });
-        } else {
-          updatedFields.password = user.password;
-          const updatedUser = await userModel.findByIdAndUpdate(
-            userId,
-            updatedFields,
-            { new: true }
-          );
-          res.status(200).json({
-            message: "User updated without password, invalid old password",
-          });
-        }
-      } else {
-        const updatedUser = await userModel.findByIdAndUpdate(
-          userId,
-          { ...req.body },
-          { new: true }
+      const oldPassword = req.body.oldPassword;
+      const isMatched = bcrypt.compareSync(req.body.oldPassword, user.password);
+      if (isMatched) {
+        const newHashedPassword = bcrypt.hashSync(
+          req.body.newPassword,
+          saltRounds
         );
-        res.status(200).json({ message: "User updated successfully" });
+        const updatedUser = await userModel.findByIdAndUpdate(userId, {
+          password: newHashedPassword,
+        });
+        res.status(200).json({ message: "Password updated successfully" });
+      } else {
+        res.status(401).json({ message: "Invalid oldPassword" });
       }
     } else {
       res.status(404).json({ message: "User not found" });
@@ -110,11 +111,12 @@ const userUpdate = async (req, res) => {
 
 const userDelete = async (req, res) => {
   try {
-    const userId = req.decodedToken.id;
+    const decodedToken = req.decodedToken;
+    const userId = decodedToken.id;
     const user = await userModel.findById(userId);
     if (user) {
-      const matched = bcrypt.compareSync(req.body.password, user.password);
-      if (matched) {
+      const isMatched = bcrypt.compareSync(req.body.password, user.password);
+      if (isMatched) {
         const deletedUser = await userModel.findByIdAndDelete(userId);
         res.status(200).json({ message: "User deleted successfully" });
       } else {
@@ -128,4 +130,4 @@ const userDelete = async (req, res) => {
   }
 };
 
-export { userDelete, userLogin, userRegister, userUpdate };
+export { userChangePassword, userDelete, userLogin, userRegister, userUpdate };
