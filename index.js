@@ -2,8 +2,8 @@ import cors from "cors";
 import express from "express";
 import morgan from "morgan";
 import connection from "./DB/connection.js";
-import { load_env } from "./custom_modules/load_.env.js";
 import userRoutes from "./routes/user.routes.js";
+import { load_env } from "./utils/load_.env.js";
 
 load_env();
 const port = process.env.PORT || 3000;
