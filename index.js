@@ -1,10 +1,11 @@
 import cors from "cors";
-import "dotenv/config";
 import express from "express";
 import morgan from "morgan";
 import connection from "./DB/connection.js";
+import { load_env } from "./custom_modules/load_.env.js";
 import userRoutes from "./modules/user/user.routes.js";
 
+load_env();
 const port = process.env.PORT || 3000;
 const envMorganLogging = process.env.MORGAN_LOGGING;
 const server = express();
