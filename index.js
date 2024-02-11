@@ -3,7 +3,7 @@ import express from "express";
 import morgan from "morgan";
 import connection from "./DB/connection.js";
 import { load_env } from "./custom_modules/load_.env.js";
-import userRoutes from "./modules/user/user.routes.js";
+import userRoutes from "./routes/user.routes.js";
 
 load_env();
 const port = process.env.PORT || 3000;

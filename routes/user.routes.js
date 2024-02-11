@@ -1,20 +1,20 @@
 import exress from "express";
-import auth from "../../middleware/auth.js";
-import validation from "../../middleware/validation.js";
 import {
   userChangePassword,
   userDelete,
   userLogin,
   userRegister,
   userUpdate,
-} from "./user.controller.js";
+} from "../controllers/user.controller.js";
+import auth from "../middleware/auth.js";
+import validation from "../middleware/validation.js";
 import {
   userChangePasswordValidationSchema,
   userDeleteValidationSchema,
   userLoginValidationSchema,
   userRegisterValidationSchema,
   userUpdateValidationSchema,
-} from "./user.validation.js";
+} from "../validation/user.validation.js";
 
 const userRoutes = exress.Router();
 

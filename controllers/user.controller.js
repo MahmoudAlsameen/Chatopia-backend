@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt";
 import "dotenv/config";
 import jwt from "jsonwebtoken";
-import userModel from "../../DB/models/user.model.js";
+import userModel from "../DB/models/user.model.js";
 
 const jwt_secret_key = process.env.JWT_SECRET_KEY;
 const saltRounds = 4;
